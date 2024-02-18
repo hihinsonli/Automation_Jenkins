@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to AWS S3') {
             steps {
                 // Adjusted to the correct path
-                dir('hinson-ray-portfolio-home/build') {
+                dir('build') {
                     withAWS(credentials: 'aws_access_credential', region: '${AWS_REGION}') {
                         s3Upload(bucket: '${S3_BUCKET}', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
                     }
