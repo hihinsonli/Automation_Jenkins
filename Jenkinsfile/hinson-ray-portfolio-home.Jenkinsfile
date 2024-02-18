@@ -6,6 +6,7 @@ pipeline {
                     defaultValue: true,
                     description: 'Enable npm build process.')
     }
+    
     environment {
         AWS_CREDENTIALS_ID = 'aws_access_credential'
         S3_BUCKET = 'www.hinsonli.com'
@@ -48,11 +49,13 @@ pipeline {
         stage('Deploy to AWS S3') {
             steps {
                 dir('hinson-ray-portfolio/build') {
+                    // Use without single quotes around environment variable if they're not being replaced correctly
                     withAWS(credentials: 'aws_access_credential', region: '${AWS_REGION}') {
-                        s3Upload(bucket: '${S3_BUCKET}', file: '.', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
+                        s3Upload(bucket: '${S3_BUCKET}', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
                     }
                 }
             }
         }
+
     }
 }
