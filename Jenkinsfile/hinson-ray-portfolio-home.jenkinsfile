@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        AWS_CREDENTIALS_ID = 'aws_access_key'
+        AWS_CREDENTIALS_ID = 'aws_access_credential'
         S3_BUCKET = 'www.hinsonli.com'
         AWS_REGION = 'ap-southeast-2'
+        AWS_ACCOUNT_ID = '154864927037'
     }
 
     stages {
@@ -34,7 +35,6 @@ pipeline {
         stage('Deploy to AWS S3') {
             steps {
                 dir('hinson-ray-portfolio/build') {
-                    // Assumes you have the AWS steps plugin installed
                     withAWS(credentials: '${AWS_CREDENTIALS_ID}', region: '${AWS_REGION}') {
                         s3Upload(bucket: '${S3_BUCKET}', file: '.', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
                     }
