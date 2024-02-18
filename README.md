@@ -1,5 +1,8 @@
 # Automation_Jenkins
 Our Automation Jenkins service is running on a reserved VPS with a self-signed certificate.
 The address is https://automation.hinsonli.com/
+Visitor account:
+Username: visitor
+Password: Visitor123
 <img width="1367" alt="image" src="https://github.com/hihinsonli/Automation_Jenkins/assets/134122199/6cc5cac3-1b89-486f-bad6-8049c1153ef5">
 
