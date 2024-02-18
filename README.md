@@ -1,4 +1,5 @@
 # Automation_Jenkins
-In order to save our budget, we are using reverse proxy technology to access jenkins which running inside docker container on our local machines.
-The public endpoint is https://refined-hugely-walleye.ngrok-free.app
-<img width="1373" alt="image" src="https://github.com/hihinsonli/Automation_Jenkins/assets/134122199/e582dfd9-74d1-4644-ba1b-5d84c559be50">
+Our Automation Jenkins service is running on a reserved VPS with a self-signed certificate.
+The address is https://automation.hinsonli.com/
+<img width="1367" alt="image" src="https://github.com/hihinsonli/Automation_Jenkins/assets/134122199/6cc5cac3-1b89-486f-bad6-8049c1153ef5">
+
