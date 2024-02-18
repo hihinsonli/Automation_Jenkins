@@ -51,7 +51,7 @@ pipeline {
                 // Adjusted to the correct path
                 dir('build') {
                     withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
-                        s3Upload(bucket: '${S3_BUCKET}', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
+                        s3Upload(bucket: "${S3_BUCKET}", includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
                     }
                 }
             }
