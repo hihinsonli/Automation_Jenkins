@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    parameters {
+    booleanParam(name: 'ENABLE_BUILD',
+                    defaultValue: true,
+                    description: 'Enable npm build process.')
+    }
     environment {
         AWS_CREDENTIALS_ID = 'aws_access_credential'
         S3_BUCKET = 'www.hinsonli.com'
@@ -16,6 +21,10 @@ pipeline {
         }
 
         stage('Prepare Environment') {
+            when {
+                beforeInput true
+                environment name: 'ENABLE_BUILD', value: 'true'
+            }
             steps {
                 dir('hinson-ray-portfolio') {
                     sh 'npm install'
@@ -25,6 +34,10 @@ pipeline {
         }
 
         stage('Build') {
+            when {
+                beforeInput true
+                environment name: 'ENABLE_BUILD', value: 'true'
+            }
             steps {
                 dir('hinson-ray-portfolio') {
                     sh 'npm run build'
@@ -35,7 +48,7 @@ pipeline {
         stage('Deploy to AWS S3') {
             steps {
                 dir('hinson-ray-portfolio/build') {
-                    withAWS(credentials: '${AWS_CREDENTIALS_ID}', region: '${AWS_REGION}') {
+                    withAWS(credentials: 'aws_access_credential', region: '${AWS_REGION}') {
                         s3Upload(bucket: '${S3_BUCKET}', file: '.', includePathPattern: '**/*', workingDir: '.', acl: 'PublicRead')
                     }
                 }
