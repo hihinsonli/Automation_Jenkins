@@ -1,5 +1,5 @@
 # Automation_Jenkins
-Our Automation Jenkins service is running on a reserved VPS with a self-signed certificate.
+Our Automation Jenkins service is running on a reserved VPS with a Cloudflare proxied SSL/TLS encryption.
 <BR>
 The address is https://automation.hinsonli.com/
 <BR>
