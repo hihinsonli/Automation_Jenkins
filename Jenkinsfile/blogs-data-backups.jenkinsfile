@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    environment {
+        AWS_S3_BUCKET = 'hinson-portfolio-ecosystem-backups'
+        AWS_CREDENTIALS_ID = 'aws_access_credential'
+    }
+    stages {
+        stage('Backup Databases') {
+            steps {
+                script {
+                    // Generate a datetime string
+                    def date = new Date()
+                    def formattedDate = date.format('yyyyMMddHHmmss')
+                    def hinsonBackupFileName = "hinson_blog_db_dump_backup_${formattedDate}.sql"
+                    def rayBackupFileName = "ray_blog_db_dump_backup_${formattedDate}.sql"
+
+                    def hinsondbContainerName = 'hinson-blog-db'
+                    def raydbContainerName = 'ray-blog-db'
+
+                    // Backup Hinson's blog database with datetime in filename
+                    sh "docker exec ${hinsondbContainerName} mysqldump -u \${BLOG_DB_HINSON} -p\${BLOG_DB_HINSON_PASSWORD} wordpress > ${hinsonBackupFileName}"
+
+                    // Backup Ray's blog database with datetime in filename
+                    sh "docker exec ${raydbContainerName} mysqldump -u \${BLOG_DB_RAY} -p\${BLOG_DB_RAY_PASSWORD} wordpress > ${rayBackupFileName}"
+                }
+            }
+        }
+
+        stage('Upload to S3') {
+            steps {
+                script {
+                    // Using withCredentials to inject AWS credentials
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '${AWS_CREDENTIALS_ID}']]) {
+                        // Upload the backups with datetime in their filenames to S3
+                        sh "aws s3 cp ${hinsonBackupFileName} s3://${AWS_S3_BUCKET}/hinson-blog/${hinsonBackupFileName}"
+                        sh "aws s3 cp ${rayBackupFileName} s3://${AWS_S3_BUCKET}/ray-blog/${rayBackupFileName}"
+                    }
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs(cleanWhenAborted: true,
+                    cleanWhenFailure: true,
+                    cleanWhenNotBuilt: true,
+                    cleanWhenSuccess: true,
+                    cleanWhenUnstable: true,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true)
+        }
+    }
+}
