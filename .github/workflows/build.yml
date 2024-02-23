@@ -15,6 +15,7 @@ jobs:
         run: |
           sudo apt update && apt upgrade -y
           sudo apt install awscli
+          sudo npm update
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v4
