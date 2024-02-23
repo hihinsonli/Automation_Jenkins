@@ -13,7 +13,7 @@ jobs:
 
       - name: Install AWS CLI
         run: |
-          sudo apt update && apt upgrade -y
+          sudo apt update && sudo apt upgrade -y
           sudo apt install awscli
           sudo npm update
 
