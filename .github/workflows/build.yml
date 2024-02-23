@@ -1,0 +1,29 @@
+name: Push file to AWS s3
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  upload-to-s3:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt update && apt upgrade -y
+          sudo apt install awscli
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Upload file to S3
+        run: aws s3 cp ./test_files/Andy_Github_Action_Demo.txt s3://hinsonli-test/Andy_Github_Action_Demo.txt
+
+    
