@@ -26,10 +26,10 @@ pipeline {
                         string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
                         // Backup Hinson's blog database with datetime in filename
-                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
+                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'docker exec hinson-blog mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
 
                         // Backup Ray's blog database with datetime in filename
-                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'mysqldump -u ${BLOG_DB_RAY} -p${BLOG_DB_RAY_PASSWORD} wordpress' > ${rayBackupFileName}"
+                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'docker exec ray-blog mysqldump -u ${BLOG_DB_RAY} -p${BLOG_DB_RAY_PASSWORD} wordpress' > ${rayBackupFileName}"
                     }
                 }
             }
