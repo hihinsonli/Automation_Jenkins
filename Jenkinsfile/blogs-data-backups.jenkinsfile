@@ -14,14 +14,23 @@ pipeline {
                     def hinsonBackupFileName = "hinson_blog_db_dump_backup_${formattedDate}.sql"
                     def rayBackupFileName = "ray_blog_db_dump_backup_${formattedDate}.sql"
 
-                    def hinsondbContainerName = 'hinson-blog-db'
-                    def raydbContainerName = 'ray-blog-db'
+                    // Define the SSH key path and the remote user and host
+                    def sshKeyPath = '/root/.ssh/blog24022024'
+                    def remoteUserHost = 'root@10.0.0.1'
 
-                    // Backup Hinson's blog database with datetime in filename
-                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 'mysqldump -u \\${BLOG_DB_HINSON} -p\\${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
+                    // Use withCredentials to inject database credentials
+                    withCredentials([
+                        string(credentialsId: 'BLOG_DB_HINSON_CREDENTIALS_ID', variable: 'BLOG_DB_HINSON'),
+                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD_CREDENTIALS_ID', variable: 'BLOG_DB_HINSON_PASSWORD'),
+                        string(credentialsId: 'BLOG_DB_RAY_CREDENTIALS_ID', variable: 'BLOG_DB_RAY'),
+                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD_CREDENTIALS_ID', variable: 'BLOG_DB_RAY_PASSWORD')
+                    ]) {
+                        // Backup Hinson's blog database with datetime in filename
+                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
 
-                    // Backup Ray's blog database with datetime in filename
-                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 'mysqldump -u \\${BLOG_DB_RAY} -p\\${BLOG_DB_RAY_PASSWORD} wordpress' > ${rayBackupFileName}"
+                        // Backup Ray's blog database with datetime in filename
+                        sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'mysqldump -u ${BLOG_DB_RAY} -p${BLOG_DB_RAY_PASSWORD} wordpress' > ${rayBackupFileName}"
+                    }
                 }
             }
         }
@@ -29,8 +38,13 @@ pipeline {
         stage('Upload to S3') {
             steps {
                 script {
-                    // Using withCredentials to inject AWS credentials
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: '${AWS_CREDENTIALS_ID}']]) {
+                    // Use withCredentials to inject AWS credentials
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: AWS_CREDENTIALS_ID,
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
                         // Upload the backups with datetime in their filenames to S3
                         sh "aws s3 cp ${hinsonBackupFileName} s3://${AWS_S3_BUCKET}/hinson-blog/${hinsonBackupFileName}"
                         sh "aws s3 cp ${rayBackupFileName} s3://${AWS_S3_BUCKET}/ray-blog/${rayBackupFileName}"
