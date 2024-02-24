@@ -19,15 +19,15 @@ pipeline {
                     def remoteUserHost = 'root@10.0.0.1'
 
                     // Use withCredentials to inject database credentials
-					withCredentials([
-					    sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'sshKeyPath'),
-					    string(credentialsId: 'db-hinson-username-id', variable: 'BLOG_DB_HINSON'),
-					    string(credentialsId: 'db-hinson-password-id', variable: 'BLOG_DB_HINSON_PASSWORD')
-					]) {
-					    sh '''
-					    ssh -o StrictHostKeyChecking=no -i $sshKeyPath root@10.0.0.1 'docker exec hinson-blog mysqldump -u $BLOG_DB_HINSON -p$BLOG_DB_HINSON_PASSWORD wordpress' > $hinsonBackupFileName
-					    '''
-					}
+                    withCredentials([
+	                    sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'sshKeyPath'),
+	                    string(credentialsId: 'db-hinson-username-id', variable: 'BLOG_DB_HINSON'),
+	                    string(credentialsId: 'db-hinson-password-id', variable: 'BLOG_DB_HINSON_PASSWORD')
+                    ]) {
+	                    sh '''
+	                    ssh -o StrictHostKeyChecking=no -i $sshKeyPath root@10.0.0.1 'docker exec hinson-blog mysqldump -u $BLOG_DB_HINSON -p$BLOG_DB_HINSON_PASSWORD wordpress' > $hinsonBackupFileName
+	                    '''
+                    }
                 }
             }
         }
