@@ -8,7 +8,8 @@ Username: visitor
 <BR>
 Password: Visitor123
 <BR>
-## Jenkins running inside a docker container launched by below command
+### Build Baked Jenkins docker image Via Dockerfile at: `https://github.com/hihinsonli/Automation_Jenkins/blob/main/Dockerfiles/Jenkins_Images/Dockerfile`
+### Jenkins running inside a docker container launched by below command
 ```
 docker run --name jenkins \
 -u root \
