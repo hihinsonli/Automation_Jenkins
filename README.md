@@ -1,24 +1,17 @@
 # Automation_Jenkins
 Our Automation Jenkins service is running on a reserved VPS with a Cloudflare proxied SSL/TLS encryption. Server traffic managed by Nginx.
-
 <BR>
 
 The address is https://automation.hinsonli.com/
-
 <BR>
 
 ## Visitor account:
-
 Username: visitor
-
 <BR>
-
 Password: Visitor123
-
 <BR>
 
 ## Build Baked Jenkins docker image Via Dockerfile at: [Jenkins Docker Image](./Dockerfiles/Jenkins_Images/Dockerfile)
-
 <BR>
 
 ### Jenkins running inside a docker container launched by below command
