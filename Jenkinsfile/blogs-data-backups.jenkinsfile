@@ -22,7 +22,7 @@ pipeline {
                     withCredentials([
 	                    sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'sshKeyPath'),
 	                    string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
-	                    string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD')
+	                    string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
 	                    string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
 	                    string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
