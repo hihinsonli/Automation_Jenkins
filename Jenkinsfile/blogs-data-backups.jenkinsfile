@@ -18,10 +18,10 @@ pipeline {
                     def raydbContainerName = 'ray-blog-db'
 
                     // Backup Hinson's blog database with datetime in filename
-                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 "mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress" > ${hinsonBackupFileName}"
+                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 'mysqldump -u \\${BLOG_DB_HINSON} -p\\${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
 
                     // Backup Ray's blog database with datetime in filename
-                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 "mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress" > ${hinsonBackupFileName}"
+                    sh "ssh -i /root/.ssh/blog24022024 root@10.0.0.1 'mysqldump -u \\${BLOG_DB_RAY} -p\\${BLOG_DB_RAY_PASSWORD} wordpress' > ${rayBackupFileName}"
                 }
             }
         }
