@@ -20,10 +20,10 @@ pipeline {
 
                     // Use withCredentials to inject database credentials
                     withCredentials([
-                        string(credentialsId: 'BLOG_DB_HINSON_CREDENTIALS_ID', variable: 'BLOG_DB_HINSON'),
-                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD_CREDENTIALS_ID', variable: 'BLOG_DB_HINSON_PASSWORD'),
-                        string(credentialsId: 'BLOG_DB_RAY_CREDENTIALS_ID', variable: 'BLOG_DB_RAY'),
-                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD_CREDENTIALS_ID', variable: 'BLOG_DB_RAY_PASSWORD')
+                        string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
+                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
+                        string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
+                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
                         // Backup Hinson's blog database with datetime in filename
                         sh "ssh -i ${sshKeyPath} ${remoteUserHost} 'mysqldump -u ${BLOG_DB_HINSON} -p${BLOG_DB_HINSON_PASSWORD} wordpress' > ${hinsonBackupFileName}"
