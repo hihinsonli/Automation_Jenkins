@@ -18,10 +18,10 @@ pipeline {
                     def raydbContainerName = 'ray-blog-db'
 
                     // Backup Hinson's blog database with datetime in filename
-                    sh "docker exec ${hinsondbContainerName} mysqldump -u \${BLOG_DB_HINSON} -p\${BLOG_DB_HINSON_PASSWORD} wordpress > ${hinsonBackupFileName}"
+                    sh "docker exec ${hinsondbContainerName} mysqldump -h 10.0.0.1 -u \${BLOG_DB_HINSON} -p\${BLOG_DB_HINSON_PASSWORD} wordpress > ${hinsonBackupFileName}"
 
                     // Backup Ray's blog database with datetime in filename
-                    sh "docker exec ${raydbContainerName} mysqldump -u \${BLOG_DB_RAY} -p\${BLOG_DB_RAY_PASSWORD} wordpress > ${rayBackupFileName}"
+                    sh "docker exec ${raydbContainerName} mysqldump -u -h 10.0.0.1 \${BLOG_DB_RAY} -p\${BLOG_DB_RAY_PASSWORD} wordpress > ${rayBackupFileName}"
                 }
             }
         }
