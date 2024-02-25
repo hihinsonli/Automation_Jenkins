@@ -14,9 +14,12 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y docker-ce-cli
 
-# Install Node.js and npm
+# Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
+
+# Try installing npm explicitly if it's missing
+RUN apt-get install -y npm
 
 # Verify Node.js and npm installations
 RUN node -v && \
