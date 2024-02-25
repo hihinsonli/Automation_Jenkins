@@ -14,5 +14,13 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y docker-ce-cli
 
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get install -y nodejs
+
+# Verify Node.js and npm installations
+RUN node -v && \
+    npm -v
+
 # Switch back to the jenkins user
 USER jenkins
