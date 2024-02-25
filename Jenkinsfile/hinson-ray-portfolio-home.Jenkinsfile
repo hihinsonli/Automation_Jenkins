@@ -29,6 +29,7 @@ pipeline {
             steps {
                 dir('hinson-ray-portfolio') {
                     sh 'npm install'
+                    sh 'npm audit'
                     sh 'npm install sass'
                 }
             }
