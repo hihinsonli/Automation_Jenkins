@@ -23,7 +23,7 @@ pipeline {
                     // Activate the virtual environment
                     sh '. venv/bin/activate'
                     // Install pandas within the virtual environment
-                    sh 'pip3 install pandas'
+                    sh 'pip install pandas'
                 }
             }
         }
