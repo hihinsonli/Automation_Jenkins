@@ -14,13 +14,13 @@ s3_path = response['QueryExecution']['ResultConfiguration']['OutputLocation']
 # Assuming the S3 path format is s3://bucket-name/path/to/results.csv
 bucket, key = s3_path.replace("s3://", "").split('/', 1)
 obj = s3_client.get_object(Bucket=bucket, Key=key)
-df = pd.read_csv(obj['Body'], header=0)
+df = pd.read_csv(obj['Body'])
 print(df.columns)
 
 
 # Now df contains your CloudTrail data, proceed with visualization
 # Example: Plotting number of actions per user
-df.groupby('userName')['actionType'].count().plot(kind='bar')
+df.groupby('username')['eventName'].count().plot(kind='bar')
 plt.title('AWS Actions per User')
 plt.xlabel('User Name')
 plt.ylabel('Number of Actions')
