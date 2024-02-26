@@ -42,16 +42,20 @@ pipeline {
         stage('Check Query Execution') {
             steps {
                 script {
-                    // Update the path to the check_athena_query_status.py script
-                    sh "python3 python/check_athena_query_status.py ${env.QUERY_EXECUTION_ID}"
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                        // Update the path to the check_athena_query_status.py script
+                        sh "python3 python/check_athena_query_status.py ${env.QUERY_EXECUTION_ID}"
+                    }
                 }
             }
         }
         stage('Visualize Data') {
             steps {
                 script {
-                    // Use the PYTHON_SCRIPT_PATH environment variable
-                    sh "python3 ${PYTHON_SCRIPT_PATH} ${env.QUERY_EXECUTION_ID}"
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                        // Use the PYTHON_SCRIPT_PATH environment variable
+                        sh "python3 ${PYTHON_SCRIPT_PATH} ${env.QUERY_EXECUTION_ID}"
+                    }
                 }
             }
         }
