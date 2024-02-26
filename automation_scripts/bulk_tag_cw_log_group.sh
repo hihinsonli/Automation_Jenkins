@@ -1,3 +1,10 @@
+##################
+Use case:
+The AWS Tag Editor does not offer functionality for bulk tagging CloudWatch log groups. 
+To address this limitation, the provided shell script facilitates tagging log groups that share a common substring in their names. 
+The script operates with partial automation, allowing the addition of a single tag per script execution.
+##################
+
 #!/bin/bash
 
 # Define tags
