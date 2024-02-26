@@ -25,14 +25,9 @@ RUN apt-get install -y npm
 RUN node -v && \
     npm -v
 
-# Update packages and install Python, pip, and software properties common (for add-apt-repository)
+# Update packages and install Python, pip, and awscli
 RUN apt-get update && \
-    apt-get install -y apt-transport-https \
-                       ca-certificates \
-                       curl \
-                       gnupg2 \
-                       software-properties-common \
-                       python3 \
+    apt-get install -y python3 \
                        python3-pip \
                        python3-venv \
                        awscli
