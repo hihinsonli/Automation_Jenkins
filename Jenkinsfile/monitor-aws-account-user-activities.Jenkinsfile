@@ -10,7 +10,9 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/hihinsonli/Automation_Jenkins.git', branch: 'main'
+                git url: 'https://github.com/hihinsonli/Automation_Jenkins.git',
+                   branch: 'main',
+                   credentialsId: 'github-credentials-id '
             }
         }
         stage('Query CloudTrail Logs') {
