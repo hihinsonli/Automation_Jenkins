@@ -4,10 +4,15 @@ pipeline {
         AWS_REGION = 'ap-southeast-2'
         ATHENA_DATABASE = 'cloudtrail_logs_db'
         S3_BUCKET_FOR_RESULTS = 's3://hinson-account-user-activitiy-athena-result/Unsaved/'
-        PYTHON_SCRIPT_PATH = '../../python/visualize_data.py'
+        PYTHON_SCRIPT_PATH = './python/visualize_data.py'
         AWS_CREDENTIALS_ID = 'aws_access_credential'
     }
     stages {
+        stage('Checkout Code') {
+            steps {
+                git url: 'https://github.com/hihinsonli/Automation_Jenkins.git', branch: 'main'
+            }
+        }
         stage('Query CloudTrail Logs') {
             steps {
                 script {
