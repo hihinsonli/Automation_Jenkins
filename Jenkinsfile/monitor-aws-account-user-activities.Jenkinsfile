@@ -15,6 +15,18 @@ pipeline {
                    credentialsId: 'github-credentials-id '
             }
         }
+        stage('Setup Python Virtual Environment and Install Dependencies') {
+            steps {
+                script {
+                    // Create a virtual environment
+                    sh 'python3 -m venv venv'
+                    // Activate the virtual environment
+                    sh '. venv/bin/activate'
+                    // Install pandas within the virtual environment
+                    sh 'pip3 install pandas'
+                }
+            }
+        }
         stage('Query CloudTrail Logs') {
             steps {
                 script {
