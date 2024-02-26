@@ -3,7 +3,8 @@ import time
 import boto3
 
 query_execution_id = sys.argv[1]
-client = boto3.client('athena')
+# Specify the region directly
+client = boto3.client('athena', region_name='ap-southeast-2')
 
 while True:
     response = client.get_query_execution(QueryExecutionId=query_execution_id)
