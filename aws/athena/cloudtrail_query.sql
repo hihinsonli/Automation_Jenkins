@@ -2,23 +2,23 @@
 CREATE EXTERNAL TABLE IF NOT EXISTS cloudtrail_logs_db.cloudtrail_logs (
   eventVersion STRING,
   userIdentity STRUCT<
-    type: STRING, 
-    principalId: STRING, 
-    arn: STRING, 
-    accountId: STRING, 
-    invokedBy: STRING, 
-    accessKeyId: STRING, 
-    userName: STRING, 
+    type: STRING,
+    principalId: STRING,
+    arn: STRING,
+    accountId: STRING,
+    invokedBy: STRING,
+    accessKeyId: STRING,
+    userName: STRING,
     sessionContext: STRUCT<
       attributes: STRUCT<
-        mfaAuthenticated: STRING, 
+        mfaAuthenticated: STRING,
         creationDate: STRING
-      >, 
+      >,
       sessionIssuer: STRUCT<
-        type: STRING, 
-        principalId: STRING, 
-        arn: STRING, 
-        accountId: STRING, 
+        type: STRING,
+        principalId: STRING,
+        arn: STRING,
+        accountId: STRING,
         userName: STRING
       >
     >
@@ -31,15 +31,15 @@ CREATE EXTERNAL TABLE IF NOT EXISTS cloudtrail_logs_db.cloudtrail_logs (
   userAgent STRING,
   errorCode STRING,
   errorMessage STRING,
-  requestParameters STRING, -- Consider using Athena's JSON functions for parsing
-  responseElements STRING, -- Consider using Athena's JSON functions for parsing
-  additionalEventData STRING, -- Consider using Athena's JSON functions for parsing
+  requestParameters STRING,
+  responseElements STRING,
+  additionalEventData STRING,
   requestId STRING,
   eventId STRING,
   readOnly BOOLEAN,
   resources ARRAY<STRUCT<
-    ARN: STRING, 
-    accountId: STRING, 
+    ARN: STRING,
+    accountId: STRING,
     type: STRING
   >>,
   eventType STRING,
@@ -50,10 +50,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS cloudtrail_logs_db.cloudtrail_logs (
   vpcEndpointId STRING
 )
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-WITH SERDEPROPERTIES (
-  'serialization.format' = '1'
-)
-LOCATION 's3://hinson-aws-cloudtrail-logs-25022024/AWSLogs/CloudTrail/';
+LOCATION 's3://hinson-aws-cloudtrail-logs-25022024/AWSLogs/154864927037/CloudTrail/ap-southeast-2/';
 
 # Verify the query result from CloudTrail logs
 SELECT * FROM cloudtrail_logs_db.cloudtrail_logs LIMIT 10;
