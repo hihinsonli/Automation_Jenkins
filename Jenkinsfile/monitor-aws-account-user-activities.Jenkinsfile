@@ -21,7 +21,7 @@ pipeline {
                     withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
                         env.QUERY_EXECUTION_ID = sh(script: """
                         aws athena start-query-execution \
-                        --query-string "SELECT eventName, userIdentity.username, COUNT(*) as count FROM ${ATHENA_DATABASE}.cloudtrail_logs WHERE eventTime BETWEEN '2024-02-01T00:00:00Z' AND '2023-02-26T23:59:59Z' GROUP BY eventName, userIdentity.username" \
+                        --query-string "SELECT eventName, userIdentity.username, COUNT(*) as count FROM ${ATHENA_DATABASE}.cloudtrail_logs WHERE eventTime BETWEEN '2024-02-01T00:00:00Z' AND '2024-02-27T23:59:59Z' GROUP BY eventName, userIdentity.username" \
                         --result-configuration OutputLocation=${S3_BUCKET_FOR_RESULTS} \
                         --query-execution-context Database=${ATHENA_DATABASE} \
                         --output text
