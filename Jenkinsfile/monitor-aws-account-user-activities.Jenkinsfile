@@ -23,6 +23,7 @@ pipeline {
                 pip3 install boto3
                 '''
             }
+        }
         stage('Query CloudTrail Logs') {
             steps {
                 script {
