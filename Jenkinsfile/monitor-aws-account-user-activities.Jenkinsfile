@@ -44,6 +44,7 @@ pipeline {
                 script {
                     withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
                         // Update the path to the check_athena_query_status.py script
+                        sh 'pip3 install pandas'
                         sh "python3 python/check_athena_query_status.py ${env.QUERY_EXECUTION_ID}"
                     }
                 }
