@@ -4,7 +4,7 @@ pipeline {
         AWS_REGION = 'ap-southeast-2'
         ATHENA_DATABASE = 'cloudtrail_logs_db'
         S3_BUCKET_FOR_RESULTS = 's3://hinson-account-user-activitiy-athena-result/Unsaved/'
-        PYTHON_SCRIPT_PATH = 'Automation_Jenkins/python/visualize_cloudtrail_data.py'
+        PYTHON_SCRIPT_PATH = 'python/visualize_cloudtrail_data.py'
         AWS_CREDENTIALS_ID = 'aws_access_credential'
     }
     stages {
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Update the path to the check_athena_query_status.py script
-                    sh "python3 Automation_Jenkins/python/check_athena_query_status.py ${env.QUERY_EXECUTION_ID}"
+                    sh "python3 python/check_athena_query_status.py ${env.QUERY_EXECUTION_ID}"
                 }
             }
         }
