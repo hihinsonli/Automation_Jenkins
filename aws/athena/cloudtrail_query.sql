@@ -1,7 +1,28 @@
 # Create a CloudTrail logs table
 CREATE EXTERNAL TABLE IF NOT EXISTS cloudtrail_logs_db.cloudtrail_logs (
   eventVersion STRING,
-  userIdentity STRUCT<type: STRING, principalId: STRING, arn: STRING, accountId: STRING, invokedBy: STRING, accessKeyId: STRING, userName: STRING, sessionContext: STRUCT<attributes: STRUCT<mfaAuthenticated: STRING, creationDate: STRING>, sessionIssuer: STRUCT<type: STRING, principalId: STRING, arn: STRING, accountId: STRING, userName: STRING>>>,
+  userIdentity STRUCT<
+    type: STRING, 
+    principalId: STRING, 
+    arn: STRING, 
+    accountId: STRING, 
+    invokedBy: STRING, 
+    accessKeyId: STRING, 
+    userName: STRING, 
+    sessionContext: STRUCT<
+      attributes: STRUCT<
+        mfaAuthenticated: STRING, 
+        creationDate: STRING
+      >, 
+      sessionIssuer: STRUCT<
+        type: STRING, 
+        principalId: STRING, 
+        arn: STRING, 
+        accountId: STRING, 
+        userName: STRING
+      >
+    >
+  >,
   eventTime STRING,
   eventSource STRING,
   eventName STRING,
@@ -10,13 +31,17 @@ CREATE EXTERNAL TABLE IF NOT EXISTS cloudtrail_logs_db.cloudtrail_logs (
   userAgent STRING,
   errorCode STRING,
   errorMessage STRING,
-  requestParameters STRING,
-  responseElements STRING,
-  additionalEventData STRING,
+  requestParameters STRING, -- Consider using Athena's JSON functions for parsing
+  responseElements STRING, -- Consider using Athena's JSON functions for parsing
+  additionalEventData STRING, -- Consider using Athena's JSON functions for parsing
   requestId STRING,
   eventId STRING,
   readOnly BOOLEAN,
-  resources ARRAY<STRUCT<ARN: STRING, accountId: STRING, type: STRING>>,
+  resources ARRAY<STRUCT<
+    ARN: STRING, 
+    accountId: STRING, 
+    type: STRING
+  >>,
   eventType STRING,
   apiVersion STRING,
   recipientAccountId STRING,
