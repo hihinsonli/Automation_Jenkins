@@ -16,8 +16,8 @@ done
 # Trim trailing space
 TAGS_STR=$(echo "$TAGS_STR" | xargs)
 
-# List log groups and filter by name containing "ApplicationLogs", then tag them
-aws logs describe-log-groups --query 'logGroups[?contains(logGroupName, `ApplicationLogs`)].logGroupName' --output text | while read -r logGroupName; do
+# List log groups and filter by name containing a particular "string", then tag them
+aws logs describe-log-groups --query 'logGroups[?contains(logGroupName, `log_group_string`)].logGroupName' --output text | while read -r logGroupName; do
     echo "Tagging log group: $logGroupName with tags: $TAGS_STR"
     aws logs tag-log-group --log-group-name "$logGroupName" --tags $TAGS_STR
 done
