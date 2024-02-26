@@ -25,5 +25,10 @@ RUN apt-get install -y npm
 RUN node -v && \
     npm -v
 
+# Install Python 3 and AWS CLI
+RUN apt-get install -y python3 python3-pip && \
+    pip3 install awscli && \
+    aws --version
+
 # Switch back to the jenkins user
 USER jenkins
