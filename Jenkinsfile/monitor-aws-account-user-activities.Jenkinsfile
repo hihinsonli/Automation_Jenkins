@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_DEFAULT_REGION = 'ap-southeast-2'
+        AWS_REGION = 'ap-southeast-2'
         ATHENA_DATABASE = 'cloudtrail_logs_db'
         S3_BUCKET_FOR_RESULTS = 's3://hinson-account-user-activitiy-athena-result/Unsaved/'
         PYTHON_SCRIPT_PATH = '../../python/visualize_data.py'
@@ -11,14 +11,15 @@ pipeline {
         stage('Query CloudTrail Logs') {
             steps {
                 script {
-                    // Example Athena query command. Adjust the SQL to fit your needs.
-                    env.QUERY_EXECUTION_ID = sh(script: """
-                    aws athena start-query-execution \
-                    --query-string "SELECT eventName, userIdentity.username, COUNT(*) as count FROM ${ATHENA_DATABASE}.cloudtrail_logs WHERE eventTime BETWEEN '2024-02-01T00:00:00Z' AND '2023-02-26T23:59:59Z' GROUP BY eventName, userIdentity.username" \
-                    --result-configuration OutputLocation=${S3_BUCKET_FOR_RESULTS} \
-                    --query-execution-context Database=${ATHENA_DATABASE} \
-                    --output text
-                    """, returnStdout: true).trim()
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                        env.QUERY_EXECUTION_ID = sh(script: """
+                        aws athena start-query-execution \
+                        --query-string "SELECT eventName, userIdentity.username, COUNT(*) as count FROM ${ATHENA_DATABASE}.cloudtrail_logs WHERE eventTime BETWEEN '2024-02-01T00:00:00Z' AND '2023-02-26T23:59:59Z' GROUP BY eventName, userIdentity.username" \
+                        --result-configuration OutputLocation=${S3_BUCKET_FOR_RESULTS} \
+                        --query-execution-context Database=${ATHENA_DATABASE} \
+                        --output text
+                        """, returnStdout: true).trim()
+                    }
                 }
             }
         }
