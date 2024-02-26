@@ -30,7 +30,8 @@ RUN apt-get update && \
     apt-get install -y python3 \
                        python3-pip \
                        python3-venv \
-                       awscli
+                       awscli \
+                       python3-boto3
 
 
 # Switch back to the jenkins user
