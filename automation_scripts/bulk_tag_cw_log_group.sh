@@ -5,16 +5,16 @@ TAG_KEY1="Key1"
 TAG_VALUE1="Value1"
 TAG_KEY2="Key2"
 TAG_VALUE2="Value2"
-# Add more tags as needed
+# Add more key-value pairs as needed
 
-# Get list of log group names containing "string"
-readarray -t logGroupNames < <(aws logs describe-log-groups --query 'logGroups[?contains(logGroupName, `string`)].logGroupName' --output text)
-
-# Tag each log group individually
-for logGroupName in "${logGroupNames[@]}"; do
-    echo "Tagging log group: $logGroupName"
-    aws logs tag-log-group --log-group-name "$logGroupName" --tags "$TAG_KEY1"="$TAG_VALUE1"
-    # Add additional tags as needed
+# Get list of log group names containing "string" and read them line by line
+aws logs describe-log-groups --query 'logGroups[?contains(logGroupName, `string`)].logGroupName' --output text | while IFS=$'\t' read -r logGroupName; do
+    # Split the output into individual log group names and tag them
+    for name in $logGroupName; do
+        echo "Tagging log group: $name"
+        aws logs tag-log-group --log-group-name "$name" --tags "$TAG_KEY1"="$TAG_VALUE1"
+        # Add additional tags as needed
+    done
 done
 
 echo "Tagging complete."
