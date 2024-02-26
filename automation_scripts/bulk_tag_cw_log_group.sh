@@ -20,7 +20,6 @@ aws logs describe-log-groups --query 'logGroups[?contains(logGroupName, `string`
     for name in $logGroupName; do
         echo "Tagging log group: $name"
         aws logs tag-log-group --log-group-name "$name" --tags "$TAG_KEY1"="$TAG_VALUE1"
-        # Add additional tags as needed
     done
 done
 
