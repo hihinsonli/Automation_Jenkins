@@ -15,15 +15,14 @@ pipeline {
                    credentialsId: 'github-credentials-id '
             }
         }
-    stage('Setup Python Environment') {
-        steps {
-            sh '''
-            python3 -m venv venv
-            . venv/bin/activate
-            pip3 install boto3
-            '''
-        }
-    }
+        stage('Setup Python Environment') {
+            steps {
+                sh '''
+                python3 -m venv venv
+                . venv/bin/activate
+                pip3 install boto3
+                '''
+            }
         stage('Query CloudTrail Logs') {
             steps {
                 script {
