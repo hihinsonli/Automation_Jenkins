@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_REGION = 'ap-southeast-2'
         ATHENA_DATABASE = 'cloudtrail_logs_db'
-        S3_BUCKET_FOR_RESULTS = 's3://hinson-account-user-activitiy-athena-result/Unsaved/'
+        S3_BUCKET_FOR_RESULTS = 's3://hinson-account-user-activitiy-athena-result/CloudTrail-logs/Unsaved/'
         PYTHON_SCRIPT_PATH = 'python/visualize_cloudtrail_data.py'
         AWS_CREDENTIALS_ID = 'aws_access_credential'
     }
