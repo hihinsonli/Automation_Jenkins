@@ -26,8 +26,9 @@ RUN node -v && \
     npm -v
 
 # Update packages and install Python, pip, and awscli
+# Download packages and repository information over a secure connection (HTTPS) rather than an insecure HTTP connection
 RUN apt-get update && \
-    apt-get install -y apt-transport-https \ // Download packages and repository information over a secure connection (HTTPS) rather than an insecure HTTP connection
+    apt-get install -y apt-transport-https \
                        python3 \
                        python3-pip \
                        python3-venv \
