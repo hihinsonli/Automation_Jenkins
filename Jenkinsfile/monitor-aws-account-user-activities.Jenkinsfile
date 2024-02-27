@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git url: 'https://github.com/hihinsonli/Automation_Jenkins.git',
                    branch: 'main',
-                   credentialsId: 'github-credentials-id '
+                   credentialsId: 'github-credentials-id'
             }
         }
         stage('Query CloudTrail Logs') {
