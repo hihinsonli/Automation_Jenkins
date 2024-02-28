@@ -1,7 +1,7 @@
 name: Push file to AWS s3
 
 on:
-  push:
+  pull_request:
     branches:
       - main 
 
