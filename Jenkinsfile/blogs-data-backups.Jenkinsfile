@@ -13,18 +13,17 @@ pipeline {
                     def formattedDate = date.format('yyyyMMddHHmmss')
                     def hinsonBackupFileName = "hinson_blog_db_dump_backup_${formattedDate}.sql"
                     def rayBackupFileName = "ray_blog_db_dump_backup_${formattedDate}.sql"
-                    def remoteUserHost = 'root@10.0.0.1'
 
                     // Use withCredentials to inject database credentials
                     withCredentials([
-	                    sshUserPrivateKey(credentialsId: 'ssh-key-credential-id'),
-	                    string(credentialsId: 'SSH_KEY_PATH', variable: 'SSH_KEY_PATH'),
-	                    string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
-	                    string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
-	                    string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
-	                    string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
+                        string(credentialsId: 'SSH_KEY_PATH', variable: 'sshKeyPath'), // Retrieves the path as a variable
+                        sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'SSH_KEY'), // Use for the actual SSH key
+                        string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
+                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
+                        string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
+                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
-	                    sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 'docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress' > ${hinsonBackupFileName}"
+                        sh "ssh -o StrictHostKeyChecking=no -i ${sshKeyPath} root@10.0.0.1 'docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress' > ${hinsonBackupFileName}"
                     }
                 }
             }
