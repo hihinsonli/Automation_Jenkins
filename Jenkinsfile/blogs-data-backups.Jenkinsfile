@@ -25,11 +25,13 @@ pipeline {
                         string(credentialsId: 'BLOG_DB_RAY', variable: 'DB_RAY'),
                         string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'DB_RAY_PASS')
                     ]) {
-                        // Ensure the backup directory exists
-                        sh "mkdir -p ${backupBasePath}"
-
-                        // Execute the backup command securely
-                        sh "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/.ssh/blog24022024 root@10.0.0.1 \"docker exec hinson-blog mysqldump -u ${DB_HINSON} -p${DB_HINSON_PASS} wordpress\" > ${hinsonBackupFileName}"
+                        // Define environment variables for the command within withEnv
+                        withEnv(["DB_HINSON=${DB_HINSON}", "DB_HINSON_PASS=${DB_HINSON_PASS}", "DB_RAY=${DB_RAY}", "DB_RAY_PASS=${DB_RAY_PASS}"]) {
+                            // Use the environment variables in the command
+                            sh '''
+                            ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u $DB_HINSON -p$DB_HINSON_PASS wordpress" > $hinsonBackupFileName
+                            '''
+                        }
                     }
                 }
             }
