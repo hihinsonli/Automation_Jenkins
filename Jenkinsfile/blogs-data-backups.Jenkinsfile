@@ -29,9 +29,7 @@ pipeline {
                         sh "mkdir -p ${backupBasePath}"
 
                         // Execute the backup command securely
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i "/var/jenkins_home/.ssh/blog24022024" root@10.0.0.1 "docker exec hinson-blog mysqldump -u $DB_HINSON -p$DB_HINSON_PASS wordpress" > '${hinsonBackupFileName}'
-                        ssh -o StrictHostKeyChecking=no -i "/var/jenkins_home/.ssh/blog24022024" root@10.0.0.1 "docker exec ray-blog mysqldump -u $DB_RAY -p$DB_RAY_PASS wordpress" > '${rayBackupFileName}'
+                        sh "ssh -o StrictHostKeyChecking=no -i /var/jenkins_home/.ssh/blog24022024 root@10.0.0.1 \"docker exec hinson-blog mysqldump -u ${DB_HINSON} -p${DB_HINSON_PASS} wordpress\" > ${hinsonBackupFileName}"
                         '''
                     }
                 }
