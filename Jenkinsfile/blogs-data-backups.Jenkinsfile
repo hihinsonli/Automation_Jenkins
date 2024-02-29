@@ -27,7 +27,7 @@ pipeline {
 	                    string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
 	                    sh '''
-	                    ssh -o StrictHostKeyChecking=no -i $sshKeyPath root@10.0.0.1 'docker exec hinson-blog mysqldump -u $BLOG_DB_HINSON -p$BLOG_DB_HINSON_PASSWORD wordpress' > $hinsonBackupFileName
+	                    ssh -o StrictHostKeyChecking=no -i $sshKeyPath root@10.0.0.1 'docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress' > $hinsonBackupFileName
 	                    '''
                     }
                 }
