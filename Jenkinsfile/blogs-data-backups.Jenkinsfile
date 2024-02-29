@@ -29,7 +29,7 @@ pipeline {
                         withEnv(["DB_HINSON=${DB_HINSON}", "DB_HINSON_PASS=${DB_HINSON_PASS}", "DB_RAY=${DB_RAY}", "DB_RAY_PASS=${DB_RAY_PASS}"]) {
                             // Use the environment variables in the command
                             sh '''
-                            ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u $DB_HINSON -p$DB_HINSON_PASS wordpress" > $hinsonBackupFileName
+                            ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u \$DB_HINSON -p\$DB_HINSON_PASS wordpress" > $hinsonBackupFileName
                             '''
                         }
                     }
