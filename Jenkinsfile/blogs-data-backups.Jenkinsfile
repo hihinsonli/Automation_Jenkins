@@ -66,7 +66,7 @@ pipeline {
                     cleanWhenUnstable: true,
                     deleteDirs: true,
                     disableDeferredWipeout: true,
-                    not
+                    notFailBuild: true)
         }
     }
 }
