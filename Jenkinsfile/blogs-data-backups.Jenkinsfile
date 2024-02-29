@@ -8,11 +8,14 @@ pipeline {
         stage('Backup Databases') {
             steps {
                 script {
+                    // Define the base path for backups
+                    def backupBasePath = '/var/jenkins_home/backup'
+                    
                     // Generate a datetime string
                     def date = new Date()
                     def formattedDate = date.format('yyyyMMddHHmmss')
-                    def hinsonBackupFileName = "hinson_blog_db_dump_backup_${formattedDate}.sql"
-                    def rayBackupFileName = "ray_blog_db_dump_backup_${formattedDate}.sql"
+                    def hinsonBackupFileName = "${backupBasePath}/hinson_blog_db_dump_backup_${formattedDate}.sql"
+                    def rayBackupFileName = "${backupBasePath}/ray_blog_db_dump_backup_${formattedDate}.sql"
 
                     // Use withCredentials to inject database credentials
                     withCredentials([
@@ -22,19 +25,13 @@ pipeline {
                         string(credentialsId: 'BLOG_DB_RAY', variable: 'DB_RAY'),
                         string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'DB_RAY_PASS')
                     ]) {
-                        // Assuming hinsonBackupFileName is defined earlier and intended to be in the current directory
-                        // Debug: Print the backup file name
-                        echo "Backup file name: ${hinsonBackupFileName}"
-
-                        // Ensure the directory exists (if hinsonBackupFileName includes a directory path)
-                        sh "mkdir -p \$(dirname ${hinsonBackupFileName})"
+                        // Ensure the backup directory exists
+                        sh "mkdir -p ${backupBasePath}"
 
                         // Execute the backup command securely
-                        sh '''
-                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u $DB_HINSON -p$DB_HINSON_PASS wordpress" > $hinsonBackupFileName
-                        '''
+                        sh "ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 \"docker exec hinson-blog mysqldump -u \$DB_HINSON -p\$DB_HINSON_PASS wordpress\" > ${hinsonBackupFileName}"
+                        sh "ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 \"docker exec ray-blog mysqldump -u \$DB_RAY -p\$DB_RAY_PASS wordpress\" > ${rayBackupFileName}"
                     }
-
                 }
             }
         }
@@ -43,12 +40,9 @@ pipeline {
             steps {
                 script {
                     // Use withCredentials to inject AWS credentials
-                    withCredentials([[
-                        $class: 'AmazonWebServicesCredentialsBinding',
-                        credentialsId: AWS_CREDENTIALS_ID,
-                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                    ]]) {
+                    withCredentials([
+                        [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: AWS_CREDENTIALS_ID, accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']
+                    ]) {
                         // Upload the backups with datetime in their filenames to S3
                         sh "aws s3 cp ${hinsonBackupFileName} s3://${AWS_S3_BUCKET}/hinson-blog/${hinsonBackupFileName}"
                         sh "aws s3 cp ${rayBackupFileName} s3://${AWS_S3_BUCKET}/ray-blog/${rayBackupFileName}"
@@ -72,7 +66,7 @@ pipeline {
                     cleanWhenUnstable: true,
                     deleteDirs: true,
                     disableDeferredWipeout: true,
-                    notFailBuild: true)
+                    not
         }
     }
 }
