@@ -25,7 +25,8 @@ pipeline {
                         // Set environment variables for the command
                         withEnv(["SSH_KEY_PATH=$SSH_KEY"]) {
                             // Use environment variables directly in the command without Groovy interpolation
-                            sh 'ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress" > $hinsonBackupFileName'
+                            sh "mkdir -p $(dirname ${hinsonBackupFileName})"
+                            sh 'ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress" > $hinsonBackupFileName'
                         }
                     }
                 }
