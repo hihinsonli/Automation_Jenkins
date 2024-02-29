@@ -17,19 +17,22 @@ pipeline {
                     // Use withCredentials to inject database credentials
                     withCredentials([
                         sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'SSH_KEY_PATH'),
-                        string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
-                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
-                        string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
-                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
+                        string(credentialsId: 'BLOG_DB_HINSON', variable: 'DB_HINSON'),
+                        string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'DB_HINSON_PASS'),
+                        string(credentialsId: 'BLOG_DB_RAY', variable: 'DB_RAY'),
+                        string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'DB_RAY_PASS')
                     ]) {
+                        // Assuming hinsonBackupFileName is defined earlier and intended to be in the current directory
                         // Debug: Print the backup file name
                         echo "Backup file name: ${hinsonBackupFileName}"
-                        
-                        // Ensure the directory exists
+
+                        // Ensure the directory exists (if hinsonBackupFileName includes a directory path)
                         sh "mkdir -p \$(dirname ${hinsonBackupFileName})"
-                        
-                        // Execute the backup command
-                        sh "ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 \"docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress\" > ${hinsonBackupFileName}"
+
+                        // Execute the backup command securely
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u $DB_HINSON -p$DB_HINSON_PASS wordpress" > $hinsonBackupFileName
+                        '''
                     }
 
                 }
