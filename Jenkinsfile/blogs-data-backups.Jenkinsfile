@@ -16,19 +16,22 @@ pipeline {
 
                     // Use withCredentials to inject database credentials
                     withCredentials([
-                        sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'SSH_KEY'),
+                        sshUserPrivateKey(credentialsId: 'ssh-key-credential-id', keyFileVariable: 'SSH_KEY_PATH'),
                         string(credentialsId: 'BLOG_DB_HINSON', variable: 'BLOG_DB_HINSON'),
                         string(credentialsId: 'BLOG_DB_HINSON_PASSWORD', variable: 'BLOG_DB_HINSON_PASSWORD'),
                         string(credentialsId: 'BLOG_DB_RAY', variable: 'BLOG_DB_RAY'),
                         string(credentialsId: 'BLOG_DB_RAY_PASSWORD', variable: 'BLOG_DB_RAY_PASSWORD')
                     ]) {
-                        // Set environment variables for the command
-                        withEnv(["SSH_KEY_PATH=$SSH_KEY"]) {
-                            // Use environment variables directly in the command without Groovy interpolation
-                            sh "mkdir -p \$(dirname ${hinsonBackupFileName})"
-                            sh 'ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 "docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress" > $hinsonBackupFileName'
-                        }
+                        // Debug: Print the backup file name
+                        echo "Backup file name: ${hinsonBackupFileName}"
+                        
+                        // Ensure the directory exists
+                        sh "mkdir -p \$(dirname ${hinsonBackupFileName})"
+                        
+                        // Execute the backup command
+                        sh "ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH root@10.0.0.1 \"docker exec hinson-blog mysqldump -u \$BLOG_DB_HINSON -p\$BLOG_DB_HINSON_PASSWORD wordpress\" > ${hinsonBackupFileName}"
                     }
+
                 }
             }
         }
