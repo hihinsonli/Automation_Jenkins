@@ -27,4 +27,12 @@ jobs:
       - name: Upload file to S3
         run: aws s3 cp ./test_files/Andy_Github_Action_Demo.txt s3://hinsonli-test/Andy_Github_Action_Demo.txt
 
+      #- name: AWS Deploy S3
+        #uses: oneyedev/aws-deploy-s3@v2
+          #with:
+            #region: # default is us-east-1
+            #bucket: 
+            #source: # default is ./dist
+            #target: # default is 
+          
     
