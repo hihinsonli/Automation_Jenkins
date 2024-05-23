@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // Add your build steps here, e.g.,
+                // sh 'make'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // Add your test steps here, e.g.,
+                // sh 'make test'
+            }
+        }
+    }
+}
