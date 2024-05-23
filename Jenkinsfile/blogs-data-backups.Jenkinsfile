@@ -6,6 +6,9 @@ pipeline {
     }
     stages {
         stage('Backup Databases') {
+            when {
+                tag "*"
+            }
             steps {
                 script {
                     // Define the base path for backups
