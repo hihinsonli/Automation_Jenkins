@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Build') {
+            when {
+                tag "*"
+            }
             steps {
                 echo 'Building...'
                 // Add your build steps here, e.g.,
